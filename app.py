@@ -55,7 +55,7 @@ app_linha.place(x=0, y=35)
 alfabeto_menos = string.ascii_lowercase
 alfabeto_mais = string.ascii_uppercase
 numeros = "123456789"
-simbolos = "[]{}()*;/,_"
+simbolos = "[]{}()*;/,_-"
 
 var = IntVar()
 var.set(8)
