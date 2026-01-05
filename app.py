@@ -34,7 +34,7 @@ style = ttk.Style(root)
 style.theme_use("clam")
 
 img_0 = Image.open("password.png")
-img_0 = img_0.resize((30, 30), Image.ANTIALIAS)
+img_0 = img_0.resize((30, 30), Image.LANCZOS)
 img_0 = ImageTk.PhotoImage(img_0)
 
 app_imagem = Label(frame_main, height=60, image=img_0,
@@ -61,10 +61,10 @@ var = IntVar()
 var.set(8)
 app_info = Label(frame_main, text="Número de caracteres da senha", height=1,
                  padx=0, relief="flat", anchor="nw", font=("Ivy 10 bold"), bg=fundo, fg=co0)
-app_info.place(x=15, y=00)
+app_info.place(x=8, y=50)
 
 spin = Spinbox(frame_main, from_=0, to=20, width=5, textvariable=var)
-spin.place(x=20, y=90)
+spin.place(x=10, y=70)
 
 app_senha = Label(frame_box, text="- - -", width=20, height=2,
                   padx=0, relief="solid", anchor="center", bg=fundo,
@@ -78,7 +78,7 @@ app_info = Label(frame_box, text="ABC Letras Maiúsculas", height=1, padx=0,
 app_info.grid(row=1, column=1, sticky=NSEW, pady=5, padx=2)
 
 estado_1 = StringVar()
-estado_1.set(False)
+estado_1.set("")
 check_1 = Checkbutton(frame_box, width=1, var=estado_1, bg=fundo,
                       onvalue=alfabeto_mais, offvalue="off")
 check_1.grid(row=1, column=0, sticky=NSEW, pady=5, padx=2)
@@ -90,7 +90,7 @@ app_info = Label(frame_box, text="abc Letras minúsculas", height=1, padx=0,
 app_info.grid(row=2, column=1, sticky=NSEW, pady=5, padx=2)
 
 estado_2 = StringVar()
-estado_2.set(False)
+estado_2.set("")
 check_2 = Checkbutton(frame_box, width=1, var=estado_2, bg=fundo,
                       onvalue=alfabeto_menos, offvalue="off")
 check_2.grid(row=2, column=0, sticky=NSEW, pady=5, padx=2)
@@ -102,7 +102,7 @@ app_info = Label(frame_box, text="123 Números", height=1, padx=0,
 app_info.grid(row=3, column=1, sticky=NSEW, pady=5, padx=2)
 
 estado_3 = StringVar()
-estado_3.set(False)
+estado_3.set("")
 check_3 = Checkbutton(frame_box, width=1, var=estado_3, bg=fundo,
                       onvalue=numeros, offvalue="off")
 check_3.grid(row=3, column=0, sticky=NSEW, pady=5, padx=2)
@@ -114,7 +114,7 @@ app_info = Label(frame_box, text="!@# Símbolos", height=1, padx=0,
 app_info.grid(row=4, column=1, sticky=NSEW, pady=1, padx=2)
 
 estado_4 = StringVar()
-estado_4.set(False)
+estado_4.set("")
 check_4 = Checkbutton(frame_box, width=1, var=estado_4, bg=fundo,
                       onvalue=simbolos, offvalue="off")
 check_4.grid(row=4, column=0, sticky=NSEW, pady=1, padx=2)
@@ -130,7 +130,7 @@ def criar_senha():
     combinar = ""
 
     if estado_1.get() == alfabeto_mais:
-        combinar = alfabeto_mais
+        combinar += alfabeto_mais
     else:
         pass
 
@@ -149,8 +149,17 @@ def criar_senha():
     else:
         pass
 
+    if combinar == "":
+        messagebox.showwarning("Aviso", "Selecione pelo menos uma opção!")
+        return
+
     comprimento = int(spin.get())
-    senha = "".join(random.sample(combinar, comprimento))
+
+    if comprimento <= 0:
+        messagebox.showwarning("Aviso", "O comprimento deve ser maior que 0!")
+        return
+    
+    senha = "".join(random.choices(combinar, k=comprimento))
     app_senha["text"] = senha
 
     def copiar_senha():
